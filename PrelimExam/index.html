@@ -1,0 +1,1917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College of Computer Studies</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        /* ===== ALL CSS IN ONE PLACE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #003366;
+            --secondary-color: #0066cc;
+            --accent-color: #00a8e8;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --gray-color: #6c757d;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            background-color: var(--light-color);
+            transition: var(--transition);
+        }
+
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4 {
+            font-family: 'Roboto', sans-serif;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        h1 { font-size: 2.5rem; }
+        h2 { font-size: 2rem; }
+        h3 { font-size: 1.5rem; }
+        h4 { font-size: 1.25rem; }
+
+        p { margin-bottom: 1rem; }
+
+        a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        a:hover { color: var(--primary-color); }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #002244;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #0056b3;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Navigation */
+        .navbar {
+            background-color: white;
+            box-shadow: var(--box-shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        body.dark-mode .navbar {
+            background-color: #1a1a1a;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .logo i {
+            font-size: 1.5rem;
+            color: var(--accent-color);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-menu a {
+            color: var(--dark-color);
+            font-weight: 500;
+            padding: 0.5rem 0;
+            position: relative;
+        }
+
+        body.dark-mode .nav-menu a { color: #e0e0e0; }
+
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            color: var(--primary-color);
+        }
+
+        .nav-menu a.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--primary-color);
+        }
+
+        /* Hero Section */
+        .hero {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: center;
+            padding: 4rem 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        body.dark-mode .hero {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d3748 100%);
+        }
+
+        .hero-content h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        body.dark-mode .hero-content h1 { color: #ffffff; }
+
+        .hero-content p {
+            font-size: 1.1rem;
+            color: var(--gray-color);
+            margin-bottom: 2rem;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 3rem 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Featured Programs */
+        .featured-programs {
+            padding: 4rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--primary-color);
+        }
+
+        .tab-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 0.75rem 1.5rem;
+            background: none;
+            border: 2px solid var(--primary-color);
+            border-radius: var(--border-radius);
+            color: var(--primary-color);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .tab-btn:hover,
+        .tab-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .tab-content {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        body.dark-mode .tab-content { background-color: #1a1a1a; }
+
+        .tab-pane {
+            display: none;
+        }
+
+        .tab-pane.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Faculty Cards */
+        .faculty-slider {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .faculty-cards {
+            display: flex;
+            gap: 2rem;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            padding: 1rem 0;
+            scrollbar-width: none;
+        }
+
+        .faculty-cards::-webkit-scrollbar { display: none; }
+
+        .faculty-card {
+            flex: 0 0 auto;
+            width: 250px;
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+        }
+
+        body.dark-mode .faculty-card { background-color: #2d3748; }
+
+        .faculty-card:hover { transform: translateY(-5px); }
+
+        .faculty-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: #ddd;
+        }
+
+        .faculty-card-content {
+            padding: 1.5rem;
+        }
+
+        .faculty-name {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .faculty-position {
+            color: var(--accent-color);
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .slider-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .slider-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Events */
+        .events-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .event-card {
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+        }
+
+        body.dark-mode .event-card { background-color: #2d3748; }
+
+        .event-date {
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .event-date .day {
+            font-size: 2rem;
+            font-weight: 700;
+            display: block;
+        }
+
+        .event-content {
+            padding: 1.5rem;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 3rem 0 1rem;
+            margin-top: 4rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-col h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-col a {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .footer-col a:hover { color: white; }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-icons a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .social-icons a:hover {
+            background: var(--accent-color);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .theme-toggle {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Back to Top */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            z-index: 999;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Additional Page Styles */
+        .page-content {
+            padding: 2rem 0;
+            min-height: 60vh;
+        }
+
+        .page-content h1 {
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #eee;
+        }
+
+        body.dark-mode .page-content h1 { border-bottom-color: #444; }
+
+        /* Faculty Directory Page */
+        .faculty-controls {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 2rem;
+        }
+
+        body.dark-mode .faculty-controls { background-color: #2d3748; }
+
+        .search-box {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 3rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-color);
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            color: var(--gray-color);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        body.dark-mode .filter-btn {
+            background-color: #2d3748;
+            border-color: #444;
+            color: #b0b0b0;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .faculty-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        /* Announcements Page */
+        .announcement-controls {
+            display: flex;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .announcement-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: var(--box-shadow);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        body.dark-mode .announcement-card { background-color: #2d3748; }
+
+        .announcement-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .announcement-type {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+        }
+
+        .announcement-date {
+            color: var(--gray-color);
+            font-size: 0.875rem;
+        }
+
+        .read-more {
+            background: none;
+            border: none;
+            color: var(--accent-color);
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0;
+            margin-top: 1rem;
+        }
+
+        /* Contact Page */
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        .info-item {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            align-items: flex-start;
+        }
+
+        .info-item i {
+            color: var(--accent-color);
+            font-size: 1.25rem;
+            margin-top: 0.25rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+        }
+
+        body.dark-mode .form-group input,
+        body.dark-mode .form-group textarea,
+        body.dark-mode .form-group select {
+            background-color: #1a1a1a;
+            border-color: #444;
+            color: #e0e0e0;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .error-message {
+            color: var(--danger-color);
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin-top: 1rem;
+        }
+
+        body.dark-mode .success-message {
+            background: #0f5132;
+            color: #d1e7dd;
+        }
+
+        /* Programs Page */
+        .accordion-item {
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        .accordion-header {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: #f8f9fa;
+            border: none;
+            text-align: left;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        body.dark-mode .accordion-header { background-color: #2d3748; }
+
+        .accordion-content {
+            padding: 1.5rem;
+            background: white;
+            display: none;
+        }
+
+        body.dark-mode .accordion-content { background-color: #1a1a1a; }
+
+        .program-details {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .menu-toggle { display: block; }
+            
+            .nav-menu {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background: white;
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: var(--box-shadow);
+                transform: translateY(-100%);
+                opacity: 0;
+                visibility: hidden;
+                transition: var(--transition);
+            }
+
+            body.dark-mode .nav-menu { background-color: #1a1a1a; }
+
+            .nav-menu.active {
+                transform: translateY(0);
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .hero {
+                grid-template-columns: 1fr;
+                text-align: center;
+                padding: 2rem 20px;
+            }
+
+            .hero-content h1 { font-size: 2rem; }
+            
+            .hero-buttons { justify-content: center; }
+            
+            .contact-container { grid-template-columns: 1fr; }
+            
+            .footer-bottom { flex-direction: column; text-align: center; }
+            
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            
+            .tab-buttons { flex-direction: column; align-items: center; }
+            
+            .tab-btn { width: 100%; max-width: 300px; }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid { grid-template-columns: 1fr; }
+            .faculty-card { width: 200px; }
+            .hero-content h1 { font-size: 1.75rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="#home" class="logo">
+                <i class="fas fa-laptop-code"></i>
+                <span>College of Computer Studies</span>
+            </a>
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#home" class="nav-link active" data-page="home">Home</a></li>
+                <li><a href="#about" class="nav-link" data-page="about">About</a></li>
+                <li><a href="#programs" class="nav-link" data-page="programs">Programs</a></li>
+                <li><a href="#faculty" class="nav-link" data-page="faculty">Faculty</a></li>
+                <li><a href="#announcements" class="nav-link" data-page="announcements">Announcements</a></li>
+                <li><a href="#contact" class="nav-link" data-page="contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <main id="contentContainer">
+        <!-- HOME PAGE (Default) -->
+        <section id="home" class="page active">
+            <div class="hero">
+                <div class="hero-content">
+                    <h1>Shaping the Future of Technology</h1>
+                    <p>Excellence in computer science education, research, and innovation since 1990. Join our community of innovators and thinkers.</p>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary" onclick="showPage('programs')">Explore Programs</button>
+                        <button class="btn btn-secondary" onclick="showPage('contact')">Apply Now</button>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <div class="floating-elements">
+                        <div class="floating-element"><i class="fas fa-code"></i></div>
+                        <div class="floating-element"><i class="fas fa-robot"></i></div>
+                        <div class="floating-element"><i class="fas fa-database"></i></div>
+                        <div class="floating-element"><i class="fas fa-network-wired"></i></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stats-section">
+                <div class="container">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3 class="stat-number" data-count="1500">0</h3>
+                            <p>Students Enrolled</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3 class="stat-number" data-count="85">0</h3>
+                            <p>Faculty Members</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3 class="stat-number" data-count="12">0</h3>
+                            <p>Academic Programs</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3 class="stat-number" data-count="95">0</h3>
+                            <p>Graduation Rate</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <section class="featured-programs">
+                <div class="container">
+                    <h2 class="section-title">Featured Programs</h2>
+                    <div class="programs-tabs" id="programTabs">
+                        <div class="tab-buttons">
+                            <button class="tab-btn active" data-tab="cs">Computer Science</button>
+                            <button class="tab-btn" data-tab="it">Information Technology</button>
+                            <button class="tab-btn" data-tab="ai">Artificial Intelligence</button>
+                        </div>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="cs">
+                                <h3>Bachelor of Science in Computer Science</h3>
+                                <p>Our flagship program focuses on algorithms, software development, and computational theory. Students gain expertise in programming, data structures, and software engineering.</p>
+                                <button class="btn-link" onclick="showPage('programs')">Learn More <i class="fas fa-arrow-right"></i></button>
+                            </div>
+                            <div class="tab-pane" id="it">
+                                <h3>Bachelor of Science in Information Technology</h3>
+                                <p>Focuses on IT infrastructure, network administration, cybersecurity, and system integration. Prepares students for careers in IT management and technical support.</p>
+                                <button class="btn-link" onclick="showPage('programs')">Learn More <i class="fas fa-arrow-right"></i></button>
+                            </div>
+                            <div class="tab-pane" id="ai">
+                                <h3>Bachelor of Science in Artificial Intelligence</h3>
+                                <p>Cutting-edge program covering machine learning, neural networks, natural language processing, and robotics. Prepares students for careers in AI research and development.</p>
+                                <button class="btn-link" onclick="showPage('programs')">Learn More <i class="fas fa-arrow-right"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="featured-faculty">
+                <div class="container">
+                    <h2 class="section-title">Meet Our Faculty</h2>
+                    <div class="faculty-slider">
+                        <div class="faculty-cards" id="facultySlider">
+                            <!-- Faculty cards loaded by JavaScript -->
+                        </div>
+                        <div class="slider-controls">
+                            <button class="slider-btn prev-btn"><i class="fas fa-chevron-left"></i></button>
+                            <button class="slider-btn next-btn"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                    <div class="text-center" style="margin-top: 2rem;">
+                        <button class="btn btn-primary" onclick="showPage('faculty')">View All Faculty</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="upcoming-events">
+                <div class="container">
+                    <h2 class="section-title">Upcoming Events</h2>
+                    <div class="events-list" id="eventsList">
+                        <!-- Events loaded by JavaScript -->
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- ABOUT PAGE -->
+        <section id="about" class="page">
+            <div class="container page-content">
+                <h1>About the College</h1>
+                <div class="about-content">
+                    <div style="margin-bottom: 2rem;">
+                        <h2>Our Mission</h2>
+                        <p>To provide excellent education in computer science and information technology through innovative teaching, cutting-edge research, and community engagement.</p>
+                    </div>
+                    
+                    <div style="margin-bottom: 2rem;">
+                        <h2>Our Vision</h2>
+                        <p>To be a leading institution in computer science education and research, producing graduates who are globally competitive and socially responsible.</p>
+                    </div>
+                    
+                    <div style="margin-bottom: 2rem;">
+                        <h2>History</h2>
+                        <p>Established in 1990, the College of Computer Studies has been at the forefront of technology education for over 30 years. We have produced thousands of successful graduates who now lead in various tech industries worldwide.</p>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
+                        <div>
+                            <h3><i class="fas fa-graduation-cap" style="color: var(--accent-color);"></i> Quality Education</h3>
+                            <p>We provide industry-relevant curriculum taught by experienced faculty.</p>
+                        </div>
+                        <div>
+                            <h3><i class="fas fa-flask" style="color: var(--accent-color);"></i> Research Excellence</h3>
+                            <p>Our faculty and students engage in cutting-edge research projects.</p>
+                        </div>
+                        <div>
+                            <h3><i class="fas fa-handshake" style="color: var(--accent-color);"></i> Industry Partnerships</h3>
+                            <p>Strong connections with tech companies for internships and employment.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROGRAMS PAGE -->
+        <section id="programs" class="page">
+            <div class="container page-content">
+                <h1>Academic Programs</h1>
+                
+                <div class="programs-tabs">
+                    <div class="tab-buttons">
+                        <button class="tab-btn active" data-tab="undergrad">Undergraduate</button>
+                        <button class="tab-btn" data-tab="graduate">Graduate</button>
+                        <button class="tab-btn" data-tab="doctorate">Doctorate</button>
+                    </div>
+                    
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="undergrad">
+                            <div class="accordion" id="undergradAccordion">
+                                <!-- Loaded by JavaScript -->
+                            </div>
+                        </div>
+                        
+                        <div class="tab-pane" id="graduate">
+                            <div class="accordion" id="graduateAccordion">
+                                <!-- Loaded by JavaScript -->
+                            </div>
+                        </div>
+                        
+                        <div class="tab-pane" id="doctorate">
+                            <div class="accordion" id="doctorateAccordion">
+                                <!-- Loaded by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FACULTY PAGE -->
+        <section id="faculty" class="page">
+            <div class="container page-content">
+                <h1>Faculty Directory</h1>
+                
+                <div class="faculty-controls">
+                    <div class="search-box">
+                        <input type="text" id="facultySearch" placeholder="Search faculty by name or expertise...">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="professor">Professors</button>
+                        <button class="filter-btn" data-filter="associate">Associate</button>
+                        <button class="filter-btn" data-filter="assistant">Assistant</button>
+                    </div>
+                </div>
+                
+                <div class="faculty-grid" id="facultyGrid">
+                    <!-- Faculty cards loaded by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ANNOUNCEMENTS PAGE -->
+        <section id="announcements" class="page">
+            <div class="container page-content">
+                <h1>Announcements & Events</h1>
+                
+                <div class="announcement-controls">
+                    <button class="filter-btn active" data-type="all">All</button>
+                    <button class="filter-btn" data-type="event">Events</button>
+                    <button class="filter-btn" data-type="news">News</button>
+                    <button class="filter-btn" data-type="deadline">Deadlines</button>
+                </div>
+                
+                <div class="announcements-container" id="announcementsContainer">
+                    <!-- Announcements loaded by JavaScript -->
+                </div>
+                
+                <div class="text-center" style="margin-top: 2rem;">
+                    <button id="loadMore" class="btn btn-primary">Load More</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT PAGE -->
+        <section id="contact" class="page">
+            <div class="container page-content">
+                <h1>Contact Us</h1>
+                
+                <div class="contact-container">
+                    <div class="contact-info">
+                        <h2>Get In Touch</h2>
+                        <div class="info-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div>
+                                <h3>Address</h3>
+                                <p>College of Computer Studies<br>University Avenue<br>Academic City 12345</p>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-phone"></i>
+                            <div>
+                                <h3>Phone</h3>
+                                <p>(123) 456-7890</p>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-envelope"></i>
+                            <div>
+                                <h3>Email</h3>
+                                <p>info@ccs.edu</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-form">
+                        <h2>Send us a Message</h2>
+                        <form id="inquiryForm">
+                            <div class="form-group">
+                                <label for="name">Full Name *</label>
+                                <input type="text" id="name" name="name" required>
+                                <div class="error-message" id="nameError"></div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="email">Email Address *</label>
+                                <input type="email" id="email" name="email" required>
+                                <div class="error-message" id="emailError"></div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="subject">Subject</label>
+                                <input type="text" id="subject" name="subject">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="message">Message *</label>
+                                <textarea id="message" name="message" rows="5" required></textarea>
+                                <div class="error-message" id="messageError"></div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="inquiryType">Inquiry Type</label>
+                                <select id="inquiryType" name="inquiryType">
+                                    <option value="general">General Inquiry</option>
+                                    <option value="admission">Admission</option>
+                                    <option value="program">Program Information</option>
+                                </select>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary">Send Message</button>
+                            <div id="formMessage"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>College of Computer Studies</h3>
+                    <p>Excellence in computer science education and research for over 30 years.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#home" class="nav-link" data-page="home">Home</a></li>
+                        <li><a href="#about" class="nav-link" data-page="about">About</a></li>
+                        <li><a href="#programs" class="nav-link" data-page="programs">Programs</a></li>
+                        <li><a href="#faculty" class="nav-link" data-page="faculty">Faculty</a></li>
+                        <li><a href="#announcements" class="nav-link" data-page="announcements">Announcements</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Contact Info</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> University Avenue, Academic City</p>
+                    <p><i class="fas fa-phone"></i> (123) 456-7890</p>
+                    <p><i class="fas fa-envelope"></i> info@ccs.edu</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 College of Computer Studies. All Rights Reserved.</p>
+                <button id="themeToggle" class="theme-toggle">
+                    <i class="fas fa-moon"></i> Dark Mode
+                </button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="back-to-top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <!-- ===== ALL JAVASCRIPT IN ONE PLACE ===== -->
+    <script>
+        // ===== INITIALIZATION =====
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize navigation
+            initNavigation();
+            
+            // Initialize theme toggle
+            initThemeToggle();
+            
+            // Initialize back to top button
+            initBackToTop();
+            
+            // Initialize page system
+            initPageSystem();
+            
+            // Initialize all page-specific features
+            initHomePage();
+            initProgramsPage();
+            initFacultyPage();
+            initAnnouncementsPage();
+            initContactPage();
+            
+            // Show welcome message
+            setTimeout(() => {
+                showToast('Welcome to College of Computer Studies!');
+            }, 1000);
+        });
+
+        // ===== NAVIGATION =====
+        function initNavigation() {
+            const menuToggle = document.getElementById('menuToggle');
+            const navMenu = document.getElementById('navMenu');
+            
+            if (menuToggle && navMenu) {
+                menuToggle.addEventListener('click', function() {
+                    navMenu.classList.toggle('active');
+                    menuToggle.innerHTML = navMenu.classList.contains('active') 
+                        ? '<i class="fas fa-times"></i>' 
+                        : '<i class="fas fa-bars"></i>';
+                });
+                
+                // Close menu when clicking a link
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.addEventListener('click', () => {
+                        navMenu.classList.remove('active');
+                        menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+                    });
+                });
+            }
+        }
+
+        // ===== PAGE SYSTEM (Single Page Application) =====
+        function initPageSystem() {
+            // Set active page based on URL hash or default to home
+            const hash = window.location.hash.substring(1);
+            const defaultPage = hash || 'home';
+            showPage(defaultPage);
+            
+            // Handle browser back/forward buttons
+            window.addEventListener('hashchange', function() {
+                const page = window.location.hash.substring(1) || 'home';
+                showPage(page);
+            });
+            
+            // Handle navigation link clicks
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const page = this.getAttribute('data-page');
+                    window.location.hash = page;
+                });
+            });
+        }
+
+        function showPage(pageName) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show selected page
+            const pageElement = document.getElementById(pageName);
+            if (pageElement) {
+                pageElement.classList.add('active');
+            }
+            
+            // Update navigation
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('data-page') === pageName) {
+                    link.classList.add('active');
+                }
+            });
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+            
+            // Update URL hash
+            window.location.hash = pageName;
+        }
+
+        // ===== THEME TOGGLE =====
+        function initThemeToggle() {
+            const themeToggle = document.getElementById('themeToggle');
+            
+            // Check for saved theme
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+                updateThemeButton(true);
+            }
+            
+            if (themeToggle) {
+                themeToggle.addEventListener('click', () => {
+                    document.body.classList.toggle('dark-mode');
+                    const isDarkMode = document.body.classList.contains('dark-mode');
+                    localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+                    updateThemeButton(isDarkMode);
+                });
+            }
+        }
+
+        function updateThemeButton(isDarkMode) {
+            const themeToggle = document.getElementById('themeToggle');
+            if (themeToggle) {
+                themeToggle.innerHTML = isDarkMode 
+                    ? '<i class="fas fa-sun"></i> Light Mode' 
+                    : '<i class="fas fa-moon"></i> Dark Mode';
+            }
+        }
+
+        // ===== BACK TO TOP =====
+        function initBackToTop() {
+            const backToTopBtn = document.getElementById('backToTop');
+            
+            if (backToTopBtn) {
+                window.addEventListener('scroll', () => {
+                    if (window.pageYOffset > 300) {
+                        backToTopBtn.classList.add('visible');
+                    } else {
+                        backToTopBtn.classList.remove('visible');
+                    }
+                });
+                
+                backToTopBtn.addEventListener('click', () => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
+        }
+
+        // ===== HOME PAGE FEATURES =====
+        function initHomePage() {
+            // Animated stats counter
+            initStatsCounter();
+            
+            // Program tabs
+            initProgramTabs();
+            
+            // Faculty slider
+            initFacultySlider();
+            
+            // Load events
+            loadEvents();
+        }
+
+        function initStatsCounter() {
+            const statNumbers = document.querySelectorAll('.stat-number');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const statNumber = entry.target;
+                        const target = parseInt(statNumber.getAttribute('data-count'));
+                        animateCounter(statNumber, target);
+                        observer.unobserve(statNumber);
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            statNumbers.forEach(stat => observer.observe(stat));
+        }
+
+        function animateCounter(element, target) {
+            let current = 0;
+            const increment = target / 50;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    clearInterval(timer);
+                    element.textContent = target + '+';
+                } else {
+                    element.textContent = Math.floor(current) + '+';
+                }
+            }, 30);
+        }
+
+        function initProgramTabs() {
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabPanes = document.querySelectorAll('.tab-pane');
+            
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Remove active class from all buttons and panes
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    tabPanes.forEach(p => p.classList.remove('active'));
+                    
+                    // Add active class to clicked button
+                    btn.classList.add('active');
+                    
+                    // Show corresponding pane
+                    const tabId = btn.getAttribute('data-tab');
+                    const targetPane = document.getElementById(tabId);
+                    if (targetPane) targetPane.classList.add('active');
+                });
+            });
+        }
+
+        function initFacultySlider() {
+            const facultySlider = document.getElementById('facultySlider');
+            const prevBtn = document.querySelector('.prev-btn');
+            const nextBtn = document.querySelector('.next-btn');
+            
+            if (!facultySlider) return;
+            
+            // Sample faculty data
+            const facultyData = [
+                { name: "Dr. Sarah Johnson", position: "Dean & Professor", image: "https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=400&h=400&fit=crop" },
+                { name: "Prof. Michael Chen", position: "Department Chair", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop" },
+                { name: "Dr. Emily Rodriguez", position: "Associate Professor", image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=400&fit=crop" },
+                { name: "Prof. David Kim", position: "Assistant Professor", image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop" },
+                { name: "Dr. Lisa Wong", position: "Professor", image: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=400&h=400&fit=crop" }
+            ];
+            
+            // Render faculty cards
+            facultySlider.innerHTML = facultyData.map(faculty => `
+                <div class="faculty-card">
+                    <img src="${faculty.image}" alt="${faculty.name}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%23eee%22/><text x=%2250%22 y=%2250%22 font-size=%2212%22 text-anchor=%22middle%22 dy=%22.3em%22>Faculty</text></svg>'">
+                    <div class="faculty-card-content">
+                        <h4 class="faculty-name">${faculty.name}</h4>
+                        <p class="faculty-position">${faculty.position}</p>
+                        <button class="btn btn-secondary" onclick="showPage('faculty')">View Profile</button>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Slider controls
+            if (prevBtn && nextBtn) {
+                prevBtn.addEventListener('click', () => {
+                    facultySlider.scrollBy({ left: -300, behavior: 'smooth' });
+                });
+                
+                nextBtn.addEventListener('click', () => {
+                    facultySlider.scrollBy({ left: 300, behavior: 'smooth' });
+                });
+            }
+        }
+
+        function loadEvents() {
+            const eventsList = document.getElementById('eventsList');
+            if (!eventsList) return;
+            
+            const events = [
+                { title: "Tech Symposium 2023", date: "Dec 15, 2023", desc: "Annual technology conference" },
+                { title: "Code for Good Hackathon", date: "Dec 20, 2023", desc: "48-hour coding competition" },
+                { title: "AI Workshop", date: "Jan 10, 2024", desc: "Machine learning hands-on workshop" }
+            ];
+            
+            eventsList.innerHTML = events.map(event => `
+                <div class="event-card">
+                    <div class="event-date">
+                        <span class="day">${event.date.split(' ')[1].replace(',', '')}</span>
+                        <span class="month">${event.date.split(' ')[0]}</span>
+                    </div>
+                    <div class="event-content">
+                        <h4 class="event-title">${event.title}</h4>
+                        <p class="event-description">${event.desc}</p>
+                        <button class="btn-link" onclick="showPage('announcements')">Learn More <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ===== PROGRAMS PAGE =====
+        function initProgramsPage() {
+            // Initialize program tabs
+            const programTabBtns = document.querySelectorAll('#programs .tab-btn');
+            const programTabPanes = document.querySelectorAll('#programs .tab-pane');
+            
+            programTabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    programTabBtns.forEach(b => b.classList.remove('active'));
+                    programTabPanes.forEach(p => p.classList.remove('active'));
+                    
+                    btn.classList.add('active');
+                    const tabId = btn.getAttribute('data-tab');
+                    const targetPane = document.getElementById(tabId);
+                    if (targetPane) targetPane.classList.add('active');
+                    
+                    // Load accordion for this tab
+                    loadAccordion(tabId);
+                });
+            });
+            
+            // Load initial accordion
+            loadAccordion('undergrad');
+        }
+
+        function loadAccordion(level) {
+            const accordionId = level + 'Accordion';
+            const accordionContainer = document.getElementById(accordionId);
+            if (!accordionContainer) return;
+            
+            const programs = {
+                undergrad: [
+                    { title: "BS Computer Science", desc: "Focuses on algorithms and software development", courses: ["Data Structures", "Algorithms", "Software Engineering"], duration: "4 years" },
+                    { title: "BS Information Technology", desc: "IT infrastructure and network administration", courses: ["Networking", "Cybersecurity", "Database Systems"], duration: "4 years" },
+                    { title: "BS Information Systems", desc: "Business and technology integration", courses: ["Business Intelligence", "Enterprise Systems", "Project Management"], duration: "4 years" }
+                ],
+                graduate: [
+                    { title: "MS Computer Science", desc: "Advanced computer science with research", courses: ["Advanced Algorithms", "Machine Learning", "Thesis"], duration: "2 years" },
+                    { title: "MS Information Technology", desc: "IT management and leadership", courses: ["IT Governance", "Security Management", "Capstone"], duration: "2 years" }
+                ],
+                doctorate: [
+                    { title: "PhD Computer Science", desc: "Doctoral research program", requirements: ["Master's degree", "Research proposal", "Dissertation"], duration: "4-6 years" }
+                ]
+            };
+            
+            const programList = programs[level] || [];
+            accordionContainer.innerHTML = programList.map(program => `
+                <div class="accordion-item">
+                    <button class="accordion-header">
+                        ${program.title}
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <p>${program.desc}</p>
+                        ${program.courses ? `<h4>Core Courses:</h4><ul>${program.courses.map(course => `<li>${course}</li>`).join('')}</ul>` : ''}
+                        ${program.requirements ? `<h4>Requirements:</h4><ul>${program.requirements.map(req => `<li>${req}</li>`).join('')}</ul>` : ''}
+                        <div class="program-details">
+                            <span><i class="fas fa-clock"></i> ${program.duration}</span>
+                            <span><i class="fas fa-book"></i> ${program.courses ? program.courses.length + ' courses' : 'Research focused'}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Initialize accordion functionality
+            initAccordions(accordionContainer);
+        }
+
+        function initAccordions(container) {
+            const headers = container.querySelectorAll('.accordion-header');
+            headers.forEach(header => {
+                header.addEventListener('click', function() {
+                    const content = this.nextElementSibling;
+                    const icon = this.querySelector('i');
+                    
+                    if (content.style.display === 'block') {
+                        content.style.display = 'none';
+                        icon.classList.remove('fa-chevron-up');
+                        icon.classList.add('fa-chevron-down');
+                    } else {
+                        content.style.display = 'block';
+                        icon.classList.remove('fa-chevron-down');
+                        icon.classList.add('fa-chevron-up');
+                    }
+                });
+            });
+        }
+
+        // ===== FACULTY PAGE =====
+        function initFacultyPage() {
+            const facultyGrid = document.getElementById('facultyGrid');
+            const searchInput = document.getElementById('facultySearch');
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            
+            if (!facultyGrid) return;
+            
+            // Sample faculty data
+            const facultyData = [
+                { id: 1, name: "Dr. Sarah Johnson", position: "Dean & Professor", department: "Computer Science", expertise: "AI, Machine Learning", category: "professor" },
+                { id: 2, name: "Prof. Michael Chen", position: "Department Chair", department: "Computer Science", expertise: "Data Science", category: "professor" },
+                { id: 3, name: "Dr. Emily Rodriguez", position: "Associate Professor", department: "Cybersecurity", expertise: "Network Security", category: "associate" },
+                { id: 4, name: "Prof. David Kim", position: "Assistant Professor", department: "Software Engineering", expertise: "DevOps, Cloud", category: "assistant" },
+                { id: 5, name: "Dr. Lisa Wong", position: "Professor", department: "HCI", expertise: "UX Design", category: "professor" },
+                { id: 6, name: "Prof. Robert Garcia", position: "Lecturer", department: "IT", expertise: "Web Development", category: "assistant" }
+            ];
+            
+            // Store data
+            window.facultyData = facultyData;
+            
+            // Render faculty
+            renderFaculty(facultyData);
+            
+            // Search functionality
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    const searchTerm = this.value.toLowerCase();
+                    const filtered = facultyData.filter(faculty => 
+                        faculty.name.toLowerCase().includes(searchTerm) ||
+                        faculty.expertise.toLowerCase().includes(searchTerm) ||
+                        faculty.department.toLowerCase().includes(searchTerm)
+                    );
+                    renderFaculty(filtered);
+                });
+            }
+            
+            // Filter functionality
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const filter = this.getAttribute('data-filter');
+                    const filtered = filter === 'all' 
+                        ? facultyData 
+                        : facultyData.filter(faculty => faculty.category === filter);
+                    
+                    renderFaculty(filtered);
+                });
+            });
+        }
+
+        function renderFaculty(facultyArray) {
+            const facultyGrid = document.getElementById('facultyGrid');
+            if (!facultyGrid) return;
+            
+            facultyGrid.innerHTML = facultyArray.map(faculty => `
+                <div class="faculty-card">
+                    <img src="https://images.unsplash.com/photo-${150000 + faculty.id}?w=400&h=400&fit=crop" 
+                         alt="${faculty.name}"
+                         onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%23ddd%22/><text x=%2250%22 y=%2250%22 font-size=%2212%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%23666%22>${faculty.name.split(' ')[0]}</text></svg>'">
+                    <div class="faculty-card-content">
+                        <h3 class="faculty-name">${faculty.name}</h3>
+                        <p class="faculty-position">${faculty.position}</p>
+                        <p class="faculty-department">${faculty.department}</p>
+                        <p><i class="fas fa-graduation-cap"></i> ${faculty.expertise}</p>
+                        <button class="btn btn-secondary" onclick="viewFaculty(${faculty.id})">View Profile</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function viewFaculty(id) {
+            const faculty = window.facultyData?.find(f => f.id === id);
+            if (faculty) {
+                const profileHTML = `
+                    <h3>${faculty.name}</h3>
+                    <p><strong>Position:</strong> ${faculty.position}</p>
+                    <p><strong>Department:</strong> ${faculty.department}</p>
+                    <p><strong>Expertise:</strong> ${faculty.expertise}</p>
+                    <p><strong>Email:</strong> ${faculty.name.toLowerCase().replace(' ', '.')}@ccs.edu</p>
+                    <p><strong>Office:</strong> Tech Building Room ${100 + faculty.id}</p>
+                    <p><strong>Office Hours:</strong> Monday-Wednesday 10:00 AM - 12:00 PM</p>
+                `;
+                
+                // Simple alert for demo
+                alert(`Faculty Profile\n\nName: ${faculty.name}\nPosition: ${faculty.position}\nDepartment: ${faculty.department}\nExpertise: ${faculty.expertise}\n\nEmail: ${faculty.name.toLowerCase().replace(' ', '.')}@ccs.edu`);
+            }
+        }
+
+        // ===== ANNOUNCEMENTS PAGE =====
+        function initAnnouncementsPage() {
+            const container = document.getElementById('announcementsContainer');
+            const filterButtons = document.querySelectorAll('#announcements .filter-btn');
+            const loadMoreBtn = document.getElementById('loadMore');
+            
+            if (!container) return;
+            
+            // Sample announcements
+            const announcements = [
+                { id: 1, title: "Registration for Spring 2024", content: "Online registration begins December 1, 2023.", date: "2023-11-25", type: "deadline" },
+                { id: 2, title: "Guest Lecture: Future of AI", content: "Join us for a special lecture by Dr. Alan Turing.", date: "2023-12-05", type: "event" },
+                { id: 3, title: "Scholarship Deadline", content: "Last day to submit applications is November 30.", date: "2023-11-30", type: "deadline" },
+                { id: 4, title: "New Computer Lab Opening", content: "AI research lab opens December 10, 2023.", date: "2023-12-01", type: "news" },
+                { id: 5, title: "Final Exam Schedule", content: "Fall 2023 exam schedule posted.", date: "2023-11-28", type: "deadline" },
+                { id: 6, title: "Research Grant Opportunities", content: "Apply for grants by December 15.", date: "2023-12-01", type: "news" }
+            ];
+            
+            window.announcementsData = announcements;
+            window.announcementsVisible = 3;
+            
+            // Render announcements
+            renderAnnouncements(announcements.slice(0, window.announcementsVisible));
+            
+            // Filter functionality
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const type = this.getAttribute('data-type');
+                    const filtered = type === 'all' 
+                        ? announcements 
+                        : announcements.filter(ann => ann.type === type);
+                    
+                    window.announcementsVisible = 3;
+                    renderAnnouncements(filtered.slice(0, window.announcementsVisible));
+                    
+                    // Show/hide load more button
+                    if (loadMoreBtn) {
+                        loadMoreBtn.style.display = filtered.length > window.announcementsVisible ? 'block' : 'none';
+                    }
+                });
+            });
+            
+            // Load more functionality
+            if (loadMoreBtn) {
+                loadMoreBtn.addEventListener('click', function() {
+                    const currentFilter = document.querySelector('#announcements .filter-btn.active');
+                    const type = currentFilter ? currentFilter.getAttribute('data-type') : 'all';
+                    const filtered = type === 'all' 
+                        ? announcements 
+                        : announcements.filter(ann => ann.type === type);
+                    
+                    window.announcementsVisible += 3;
+                    renderAnnouncements(filtered.slice(0, window.announcementsVisible));
+                    
+                    if (window.announcementsVisible >= filtered.length) {
+                        this.style.display = 'none';
+                    }
+                });
+            }
+        }
+
+        function renderAnnouncements(announcements) {
+            const container = document.getElementById('announcementsContainer');
+            if (!container) return;
+            
+            container.innerHTML = announcements.map(ann => {
+                const date = new Date(ann.date);
+                const formattedDate = date.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                
+                return `
+                    <div class="announcement-card">
+                        <div class="announcement-header">
+                            <span class="announcement-type">${ann.type.toUpperCase()}</span>
+                            <span class="announcement-date">${formattedDate}</span>
+                        </div>
+                        <h3 class="announcement-title">${ann.title}</h3>
+                        <p class="announcement-content">${ann.content}</p>
+                        <button class="read-more" onclick="viewAnnouncement(${ann.id})">
+                            Read More <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function viewAnnouncement(id) {
+            const announcement = window.announcementsData?.find(a => a.id === id);
+            if (announcement) {
+                const date = new Date(announcement.date);
+                const formattedDate = date.toLocaleDateString('en-US', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                
+                alert(`ANNOUNCEMENT\n\n${announcement.title}\n\nDate: ${formattedDate}\nType: ${announcement.type}\n\n${announcement.content}\n\nFor more information, contact the Administration Office.`);
+            }
+        }
+
+        // ===== CONTACT PAGE =====
+        function initContactPage() {
+            const form = document.getElementById('inquiryForm');
+            if (!form) return;
+            
+            // Real-time validation
+            const nameInput = document.getElementById('name');
+            const emailInput = document.getElementById('email');
+            const messageInput = document.getElementById('message');
+            
+            if (nameInput) nameInput.addEventListener('blur', validateName);
+            if (emailInput) emailInput.addEventListener('blur', validateEmail);
+            if (messageInput) messageInput.addEventListener('blur', validateMessage);
+            
+            // Form submission
+            form.addEventListener('submit', handleFormSubmit);
+        }
+
+        function validateName() {
+            const nameInput = document.getElementById('name');
+            const errorElement = document.getElementById('nameError');
+            const name = nameInput.value.trim();
+            
+            if (name.length < 2) {
+                showError(nameInput, errorElement, "Name must be at least 2 characters");
+                return false;
+            } else {
+                clearError(nameInput, errorElement);
+                return true;
+            }
+        }
+
+        function validateEmail() {
+            const emailInput = document.getElementById('email');
+            const errorElement = document.getElementById('emailError');
+            const email = emailInput.value.trim();
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            
+            if (!emailRegex.test(email)) {
+                showError(emailInput, errorElement, "Please enter a valid email");
+                return false;
+            } else {
+                clearError(emailInput, errorElement);
+                return true;
+            }
+        }
+
+        function validateMessage() {
+            const messageInput = document.getElementById('message');
+            const errorElement = document.getElementById('messageError');
+            const message = messageInput.value.trim();
+            
+            if (message.length < 10) {
+                showError(messageInput, errorElement, "Message must be at least 10 characters");
+                return false;
+            } else {
+                clearError(messageInput, errorElement);
+                return true;
+            }
+        }
+
+        function showError(input, errorElement, message) {
+            if (input) input.classList.add('error');
+            if (errorElement) {
+                errorElement.textContent = message;
+                errorElement.style.display = 'block';
+            }
+        }
+
+        function clearError(input, errorElement) {
+            if (input) input.classList.remove('error');
+            if (errorElement) {
+                errorElement.textContent = '';
+                errorElement.style.display = 'none';
+            }
+        }
+
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            
+            // Validate all fields
+            const isNameValid = validateName();
+            const isEmailValid = validateEmail();
+            const isMessageValid = validateMessage();
+            
+            if (isNameValid && isEmailValid && isMessageValid) {
+                // Get form data
+                const formData = {
+                    name: document.getElementById('name').value,
+                    email: document.getElementById('email').value,
+                    subject: document.getElementById('subject').value,
+                    message: document.getElementById('message').value,
+                    inquiryType: document.getElementById('inquiryType').value,
+                    timestamp: new Date().toISOString()
+                };
+                
+                // Save to localStorage
+                let submissions = JSON.parse(localStorage.getItem('contactSubmissions') || '[]');
+                submissions.push(formData);
+                localStorage.setItem('contactSubmissions', JSON.stringify(submissions));
+                
+                // Show success message
+                const formMessage = document.getElementById('formMessage');
+                if (formMessage) {
+                    formMessage.innerHTML = `
+                        <div class="success-message">
+                            <i class="fas fa-check-circle"></i>
+                            <p>Thank you! Your message has been sent. We'll respond within 24 hours.</p>
+                        </div>
+                    `;
+                }
+                
+                // Reset form
+                event.target.reset();
+                
+                // Show toast
+                showToast('Message sent successfully!', 'success');
+            } else {
+                showToast('Please fix errors in the form', 'error');
+            }
+        }
+
+        // ===== TOAST NOTIFICATIONS =====
+        function showToast(message, type = 'info') {
+            // Create toast
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? '#4CAF50' : type === 'error' ? '#f44336' : '#2196F3'};
+                color: white;
+                padding: 12px 24px;
+                border-radius: 4px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+                z-index: 9999;
+                animation: slideIn 0.3s ease;
+            `;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+            
+            // Add animation styles
+            if (!document.querySelector('#toast-animations')) {
+                const style = document.createElement('style');
+                style.id = 'toast-animations';
+                style.textContent = `
+                    @keyframes slideIn {
+                        from { transform: translateX(100%); opacity: 0; }
+                        to { transform: translateX(0); opacity: 1; }
+                    }
+                    @keyframes slideOut {
+                        from { transform: translateX(0); opacity: 1; }
+                        to { transform: translateX(100%); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+
+        // ===== GLOBAL FUNCTIONS =====
+        window.showPage = showPage;
+        window.viewFaculty = viewFaculty;
+        window.viewAnnouncement = viewAnnouncement;
+        window.showToast = showToast;
+    </script>
+</body>
+</html>

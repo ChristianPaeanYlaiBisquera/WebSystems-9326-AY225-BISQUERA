@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - College of Computer Studies</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-laptop-code"></i>
+                <span>College of Computer Studies</span>
+            </a>
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="programs.html">Programs</a></li>
+                <li><a href="faculty.html">Faculty</a></li>
+                <li><a href="announcements.html">Announcements</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <div class="hero">
+            <div class="hero-content">
+                <h1>Shaping the Future of Technology</h1>
+                <p>Excellence in computer science education, research, and innovation since 1990. Join our community of innovators and thinkers.</p>
+                <div class="hero-buttons">
+                    <a href="programs.html" class="btn btn-primary">Explore Programs</a>
+                    <a href="contact.html" class="btn btn-secondary">Apply Now</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="floating-elements">
+                    <div class="floating-element"><i class="fas fa-code"></i></div>
+                    <div class="floating-element"><i class="fas fa-robot"></i></div>
+                    <div class="floating-element"><i class="fas fa-database"></i></div>
+                    <div class="floating-element"><i class="fas fa-network-wired"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-section">
+            <div class="container">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3 class="stat-number" data-count="1500">0</h3>
+                        <p>Students Enrolled</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 class="stat-number" data-count="85">0</h3>
+                        <p>Faculty Members</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 class="stat-number" data-count="12">0</h3>
+                        <p>Academic Programs</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 class="stat-number" data-count="95">0</h3>
+                        <p>Graduation Rate</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section class="featured-programs">
+            <div class="container">
+                <h2 class="section-title">Featured Programs</h2>
+                <div class="programs-tabs" id="programTabs">
+                    <div class="tab-buttons">
+                        <button class="tab-btn active" data-tab="cs">Computer Science</button>
+                        <button class="tab-btn" data-tab="it">Information Technology</button>
+                        <button class="tab-btn" data-tab="ai">Artificial Intelligence</button>
+                    </div>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="cs">
+                            <h3>Bachelor of Science in Computer Science</h3>
+                            <p>Our flagship program focuses on algorithms, software development, and computational theory. Students gain expertise in programming, data structures, and software engineering.</p>
+                            <a href="programs.html" class="btn-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                        <div class="tab-pane" id="it">
+                            <h3>Bachelor of Science in Information Technology</h3>
+                            <p>Focuses on IT infrastructure, network administration, cybersecurity, and system integration. Prepares students for careers in IT management and technical support.</p>
+                            <a href="programs.html" class="btn-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                        <div class="tab-pane" id="ai">
+                            <h3>Bachelor of Science in Artificial Intelligence</h3>
+                            <p>Cutting-edge program covering machine learning, neural networks, natural language processing, and robotics. Prepares students for careers in AI research and development.</p>
+                            <a href="programs.html" class="btn-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="featured-faculty">
+            <div class="container">
+                <h2 class="section-title">Meet Our Faculty</h2>
+                <div class="faculty-slider">
+                    <div class="faculty-cards" id="facultySlider">
+                        <!-- Faculty cards loaded by JavaScript -->
+                    </div>
+                    <div class="slider-controls">
+                        <button class="slider-btn prev-btn"><i class="fas fa-chevron-left"></i></button>
+                        <button class="slider-btn next-btn"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+                <div class="text-center" style="margin-top: 2rem;">
+                    <a href="faculty.html" class="btn btn-primary">View All Faculty</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="upcoming-events">
+            <div class="container">
+                <h2 class="section-title">Upcoming Events</h2>
+                <div class="events-list" id="eventsList">
+                    <!-- Events loaded by JavaScript -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>College of Computer Studies</h3>
+                    <p>Excellence in computer science education and research for over 30 years.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="programs.html">Programs</a></li>
+                        <li><a href="faculty.html">Faculty</a></li>
+                        <li><a href="announcements.html">Announcements</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Contact Info</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> University Avenue, Academic City</p>
+                    <p><i class="fas fa-phone"></i> (123) 456-7890</p>
+                    <p><i class="fas fa-envelope"></i> info@ccs.edu</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 College of Computer Studies. All Rights Reserved.</p>
+                <button id="themeToggle" class="theme-toggle">
+                    <i class="fas fa-moon"></i> Dark Mode
+                </button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="back-to-top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <script src="script.js"></script>
+</body>
+</html>
