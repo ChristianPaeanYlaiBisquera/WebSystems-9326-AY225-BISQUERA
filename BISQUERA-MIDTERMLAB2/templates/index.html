@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GFG PHP Academic Scraper</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:       #F7FAF7;
+      --bg2:      #EEF5EE;
+      --card:     #FFFFFF;
+      --border:   #D4E8D4;
+      --green:    #2F8D46;
+      --dark:     #1A5C2A;
+      --light:    #E8F5E9;
+      --accent:   #F4A71D;
+      --text:     #1C2B1C;
+      --muted:    #6B7F6B;
+      --code-bg:  #1E1E1E;
+      --code-fg:  #D4D4D4;
+      --easy:     #2E7D32;
+      --medium:   #E65100;
+      --hard:     #B71C1C;
+      --shadow:   0 2px 16px rgba(47,141,70,0.10);
+      --shadow-lg:0 8px 32px rgba(47,141,70,0.15);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+    }
+
+    /* ===== HEADER ===== */
+    header {
+      background: var(--dark);
+      position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+    }
+
+    .header-inner {
+      max-width: 1300px; margin: 0 auto;
+      display: flex; align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem; height: 62px; gap: 1rem;
+    }
+
+    .logo { display: flex; align-items: center; gap: 0.75rem; }
+
+    .logo-badge {
+      background: var(--green);
+      color: #fff; font-family: 'DM Mono', monospace;
+      font-size: 0.75rem; font-weight: 500;
+      padding: 0.3rem 0.7rem; border-radius: 5px;
+      letter-spacing: 0.04em;
+    }
+
+    .logo-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem; font-weight: 700;
+      color: #fff; letter-spacing: 0.01em;
+    }
+
+    .header-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem; color: #A5D6A7;
+      letter-spacing: 0.1em;
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      background: linear-gradient(135deg, var(--dark) 0%, var(--green) 100%);
+      padding: 3.5rem 2rem 3rem;
+      position: relative; overflow: hidden;
+    }
+
+    .hero::after {
+      content: 'PHP';
+      position: absolute; right: 3rem; top: 50%;
+      transform: translateY(-50%);
+      font-family: 'Playfair Display', serif;
+      font-size: 12rem; font-weight: 800;
+      color: rgba(255,255,255,0.05);
+      pointer-events: none; user-select: none;
+      letter-spacing: -0.05em;
+    }
+
+    .hero-inner { max-width: 1300px; margin: 0 auto; position: relative; }
+
+    .hero-eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem; color: #A5D6A7;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      margin-bottom: 0.6rem;
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      font-weight: 800; color: #fff;
+      line-height: 1.2; margin-bottom: 0.5rem;
+    }
+
+    .hero-desc {
+      color: #C8E6C9; font-size: 0.92rem;
+      margin-bottom: 2rem; max-width: 560px;
+    }
+
+    /* Scraper panel */
+    .scraper-panel {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 12px; padding: 1.5rem;
+      display: flex; gap: 1rem;
+      align-items: flex-end; flex-wrap: wrap;
+      backdrop-filter: blur(8px);
+      max-width: 780px;
+    }
+
+    .field-group { display: flex; flex-direction: column; gap: 0.35rem; }
+
+    .field-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem; color: #A5D6A7;
+      letter-spacing: 0.12em; text-transform: uppercase;
+    }
+
+    .url-display {
+      background: rgba(0,0,0,0.25);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 7px; padding: 0.6rem 1rem;
+      color: #fff; font-family: 'DM Mono', monospace;
+      font-size: 0.8rem; width: 320px;
+      pointer-events: none;
+    }
+
+    .count-input {
+      background: rgba(0,0,0,0.25);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 7px; padding: 0.6rem 0.9rem;
+      color: #fff; font-family: 'DM Mono', monospace;
+      font-size: 0.85rem; width: 100px; outline: none;
+    }
+
+    .name-input {
+      background: rgba(0,0,0,0.25);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 7px; padding: 0.6rem 1rem;
+      color: #fff; font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem; width: 200px; outline: none;
+    }
+
+    .name-input::placeholder { color: rgba(255,255,255,0.4); }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      padding: 0.65rem 1.4rem; border-radius: 7px;
+      font-family: 'DM Sans', sans-serif; font-size: 0.88rem;
+      font-weight: 600; cursor: pointer; border: none;
+      transition: all 0.2s; white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: var(--accent); color: #1a1a1a;
+      box-shadow: 0 2px 12px rgba(244,167,29,0.4);
+    }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(244,167,29,0.5); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .btn-white {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3); color: #fff;
+    }
+    .btn-white:hover { background: rgba(255,255,255,0.25); }
+    .btn-white:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* Progress */
+    .progress-wrap { margin-top: 1.25rem; display: none; }
+    .progress-wrap.visible { display: block; }
+
+    .progress-label {
+      font-family: 'DM Mono', monospace; font-size: 0.72rem;
+      color: #A5D6A7; margin-bottom: 0.4rem; letter-spacing: 0.06em;
+    }
+
+    .progress-track {
+      height: 5px; background: rgba(255,255,255,0.15);
+      border-radius: 3px; overflow: hidden; max-width: 480px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), #ffcc55);
+      border-radius: 3px; transition: width 0.4s ease;
+    }
+
+    .status-msg {
+      font-family: 'DM Mono', monospace; font-size: 0.72rem;
+      color: #A5D6A7; margin-top: 0.4rem;
+    }
+    .status-msg.error { color: #EF9A9A; }
+    .status-msg.success { color: #A5D6A7; }
+
+    /* ===== MAIN ===== */
+    .main { max-width: 1300px; margin: 0 auto; padding: 2rem; }
+
+    /* Controls */
+    .controls-bar {
+      display: flex; gap: 1rem; align-items: center;
+      flex-wrap: wrap; margin-bottom: 1.5rem;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1rem 1.25rem;
+      box-shadow: var(--shadow);
+    }
+
+    .search-wrap { position: relative; flex: 1; min-width: 180px; }
+    .search-icon { position: absolute; left: 0.8rem; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 0.88rem; }
+
+    .search-input {
+      width: 100%; background: var(--bg);
+      border: 1px solid var(--border); border-radius: 7px;
+      padding: 0.58rem 1rem 0.58rem 2.3rem;
+      color: var(--text); font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem; outline: none; transition: border-color 0.2s;
+    }
+    .search-input:focus { border-color: var(--green); }
+    .search-input::placeholder { color: var(--muted); }
+
+    .filter-select {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 7px; padding: 0.58rem 0.9rem;
+      color: var(--text); font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem; outline: none; cursor: pointer;
+    }
+    .filter-select:focus { border-color: var(--green); }
+
+    .stats-pill {
+      font-family: 'DM Mono', monospace; font-size: 0.72rem;
+      color: var(--muted); padding: 0.35rem 0.75rem;
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 20px; white-space: nowrap;
+    }
+
+    .view-toggle { display: flex; gap: 0.25rem; }
+    .view-btn {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 6px; padding: 0.42rem 0.65rem;
+      color: var(--muted); cursor: pointer; font-size: 0.85rem;
+      transition: all 0.15s;
+    }
+    .view-btn.active, .view-btn:hover {
+      background: var(--green); border-color: var(--green); color: #fff;
+    }
+
+    /* ===== TABLE ===== */
+    .table-wrap {
+      overflow-x: auto; border: 1px solid var(--border);
+      border-radius: 10px; background: var(--card);
+      box-shadow: var(--shadow);
+    }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.87rem; }
+
+    thead tr { background: var(--dark); }
+
+    th {
+      padding: 0.85rem 1rem; text-align: left;
+      font-family: 'DM Mono', monospace; font-size: 0.65rem;
+      color: #A5D6A7; letter-spacing: 0.12em; text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    tbody tr { border-bottom: 1px solid var(--border); transition: background 0.12s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--light); }
+
+    td { padding: 0.85rem 1rem; vertical-align: top; }
+
+    .title-cell { font-weight: 600; color: var(--dark); }
+    .title-link { font-size: 0.75rem; color: var(--green); text-decoration: none; font-family: 'DM Mono', monospace; }
+    .title-link:hover { text-decoration: underline; }
+
+    .concepts-cell {
+      max-width: 260px; overflow: hidden;
+      text-overflow: ellipsis; white-space: nowrap;
+      color: var(--muted); font-size: 0.83rem;
+    }
+
+    .code-cell {
+      max-width: 180px; overflow: hidden;
+      text-overflow: ellipsis; white-space: nowrap;
+      font-family: 'DM Mono', monospace; font-size: 0.75rem;
+      color: #777; background: var(--bg2);
+      padding: 0.2rem 0.5rem; border-radius: 4px;
+    }
+
+    /* Difficulty badges */
+    .diff-badge {
+      display: inline-block; padding: 0.18rem 0.6rem;
+      border-radius: 20px; font-size: 0.72rem;
+      font-weight: 600; white-space: nowrap;
+    }
+    .diff-easy   { background: #E8F5E9; color: var(--easy); border: 1px solid #C8E6C9; }
+    .diff-medium { background: #FFF3E0; color: var(--medium); border: 1px solid #FFE0B2; }
+    .diff-hard   { background: #FFEBEE; color: var(--hard); border: 1px solid #FFCDD2; }
+    .diff-na     { background: var(--bg2); color: var(--muted); border: 1px solid var(--border); }
+
+    .na { color: var(--muted); font-style: italic; font-size: 0.82rem; }
+
+    /* ===== CARDS ===== */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .article-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; overflow: hidden;
+      box-shadow: var(--shadow); transition: all 0.2s;
+      animation: fadeUp 0.3s ease both;
+    }
+
+    .article-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--green);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .card-header {
+      background: var(--dark); padding: 1rem 1.1rem 0.85rem;
+      display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem;
+    }
+
+    .card-num {
+      font-family: 'DM Mono', monospace; font-size: 0.68rem;
+      color: #A5D6A7; flex-shrink: 0; margin-top: 2px;
+    }
+
+    .card-title {
+      font-weight: 700; color: #fff; font-size: 0.92rem;
+      line-height: 1.3; flex: 1;
+    }
+
+    .card-body { padding: 1rem 1.1rem; }
+
+    .card-section-label {
+      font-family: 'DM Mono', monospace; font-size: 0.65rem;
+      color: var(--green); letter-spacing: 0.1em;
+      text-transform: uppercase; margin-bottom: 0.3rem;
+      margin-top: 0.7rem;
+    }
+
+    .card-text {
+      font-size: 0.83rem; color: var(--muted); line-height: 1.5;
+      display: -webkit-box; -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical; overflow: hidden;
+    }
+
+    .card-code {
+      background: var(--code-bg); color: var(--code-fg);
+      font-family: 'DM Mono', monospace; font-size: 0.73rem;
+      padding: 0.6rem 0.8rem; border-radius: 6px;
+      white-space: pre-wrap; word-break: break-word;
+      max-height: 90px; overflow: hidden;
+      line-height: 1.5;
+    }
+
+    .card-footer {
+      padding: 0.75rem 1.1rem;
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+
+    .visit-link {
+      font-family: 'DM Mono', monospace; font-size: 0.7rem;
+      color: var(--green); text-decoration: none;
+    }
+    .visit-link:hover { text-decoration: underline; }
+
+    /* PDF panel */
+    .pdf-panel {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.5rem;
+      margin-bottom: 1.5rem; box-shadow: var(--shadow);
+      display: flex; gap: 1rem; align-items: flex-end; flex-wrap: wrap;
+    }
+
+    .pdf-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem; font-weight: 700; color: var(--dark);
+      margin-bottom: 0.75rem;
+    }
+
+    .name-field {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 7px; padding: 0.6rem 1rem;
+      color: var(--text); font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem; width: 220px; outline: none;
+      transition: border-color 0.2s;
+    }
+    .name-field:focus { border-color: var(--green); }
+
+    .btn-green {
+      background: var(--green); color: #fff;
+      box-shadow: 0 2px 10px rgba(47,141,70,0.3);
+    }
+    .btn-green:hover { background: var(--dark); transform: translateY(-1px); }
+    .btn-green:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .btn-outline-green {
+      background: transparent; border: 1.5px solid var(--green);
+      color: var(--green);
+    }
+    .btn-outline-green:hover { background: var(--light); }
+
+    /* States */
+    .state-box { text-align: center; padding: 5rem 2rem; color: var(--muted); }
+    .state-icon { font-size: 3.5rem; margin-bottom: 1rem; display: block; opacity: 0.4; }
+    .state-title {
+      font-family: 'Playfair Display', serif; font-size: 1.1rem;
+      color: var(--text); margin-bottom: 0.5rem;
+    }
+    .state-desc { font-size: 0.85rem; font-family: 'DM Mono', monospace; }
+
+    .spinner {
+      display: inline-block; width: 38px; height: 38px;
+      border: 3px solid var(--border);
+      border-top-color: var(--green);
+      border-radius: 50%; animation: spin 0.75s linear infinite;
+      margin-bottom: 1rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Toast */
+    #toast {
+      position: fixed; bottom: 2rem; right: 2rem;
+      background: var(--dark); border: 1px solid var(--green);
+      border-radius: 8px; padding: 0.85rem 1.25rem;
+      font-family: 'DM Mono', monospace; font-size: 0.78rem;
+      color: #fff; box-shadow: var(--shadow-lg);
+      transform: translateY(4rem); opacity: 0;
+      transition: all 0.3s; z-index: 999; max-width: 300px;
+    }
+    #toast.show { transform: translateY(0); opacity: 1; }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border); margin-top: 4rem;
+      background: var(--dark); padding: 1.5rem 2rem;
+    }
+    .footer-inner {
+      max-width: 1300px; margin: 0 auto;
+      display: flex; justify-content: space-between;
+      align-items: center; flex-wrap: wrap; gap: 0.5rem;
+      font-family: 'DM Mono', monospace; font-size: 0.72rem;
+      color: #A5D6A7;
+    }
+
+    @media (max-width: 768px) {
+      .hero { padding: 2rem 1rem 1.75rem; }
+      .main { padding: 1.25rem; }
+      .url-display { width: 100%; }
+      .scraper-panel { flex-direction: column; align-items: stretch; }
+      .footer-inner { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-badge">GFG</div>
+      <div class="logo-text">PHP Academic Scraper</div>
+    </div>
+    <div class="header-tag">PYTHON · FLASK · BEAUTIFULSOUP · REPORTLAB</div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">// GeeksforGeeks · PHP Programming</div>
+    <h1 class="hero-title">Automated Learning<br/>Material Generator</h1>
+    <p class="hero-desc">Scrapes PHP topics from GeeksforGeeks and generates a professional academic PDF learning module.</p>
+
+    <div class="scraper-panel">
+      <div class="field-group">
+        <label class="field-label">Base URL</label>
+        <div class="url-display">https://www.geeksforgeeks.org</div>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Articles (10–15)</label>
+        <input class="count-input" id="countInput" type="number" value="15" min="10" max="15"/>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Your Name (for PDF)</label>
+        <input class="name-input" id="heroNameInput" type="text" placeholder="e.g. Christian Bisquera"/>
+      </div>
+      <button class="btn btn-primary" id="scrapeBtn" onclick="startScrape()">▶ Run Scraper</button>
+      <button class="btn btn-white" onclick="loadArticles()">⟳ Refresh</button>
+    </div>
+
+    <div class="progress-wrap" id="progressWrap">
+      <div class="progress-label" id="progressLabel">INITIALIZING...</div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill" style="width:0%"></div>
+      </div>
+      <div class="status-msg" id="statusMsg"></div>
+    </div>
+  </div>
+</section>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- PDF Generator Panel -->
+  <div class="pdf-panel">
+    <div style="flex:1; min-width:200px;">
+      <div class="pdf-title">📄 Generate PDF Learning Module</div>
+      <div style="display:flex; gap:0.75rem; flex-wrap:wrap; align-items:flex-end;">
+        <div class="field-group">
+          <label class="field-label" style="color:var(--muted);">Student Name</label>
+          <input class="name-field" id="pdfNameInput" type="text" placeholder="Your full name"/>
+        </div>
+        <button class="btn btn-green" id="pdfBtn" onclick="generatePDF()">⬇ Generate PDF</button>
+        <button class="btn btn-outline-green" onclick="window.location='/api/download-csv'">⬇ CSV</button>
+        <button class="btn btn-outline-green" onclick="window.location='/api/download-json'">⬇ JSON</button>
+      </div>
+      <div id="pdfStatus" style="margin-top:0.6rem; font-family:'DM Mono',monospace; font-size:0.75rem; color:var(--muted);"></div>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls-bar">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input class="search-input" id="searchInput" type="text"
+        placeholder="Search by title or concepts..." oninput="loadArticles()"/>
+    </div>
+    <select class="filter-select" id="diffFilter" onchange="loadArticles()">
+      <option value="all">All Difficulties</option>
+      <option value="easy">Easy / Basic</option>
+      <option value="medium">Medium</option>
+      <option value="hard">Hard / Expert</option>
+    </select>
+    <select class="filter-select" id="sortFilter" onchange="loadArticles()">
+      <option value="title">Sort: Title A–Z</option>
+      <option value="difficulty">Sort: Difficulty</option>
+    </select>
+    <div class="view-toggle">
+      <button class="view-btn active" id="viewTable" onclick="setView('table')" title="Table">▤</button>
+      <button class="view-btn" id="viewCards" onclick="setView('cards')" title="Cards">⊞</button>
+    </div>
+    <div class="stats-pill" id="statsPill">0 articles</div>
+  </div>
+
+  <!-- Output -->
+  <div id="articleOutput">
+    <div class="state-box">
+      <span class="state-icon">📚</span>
+      <div class="state-title">No Data Yet</div>
+      <div class="state-desc">// Click Run Scraper to fetch PHP articles from GeeksforGeeks</div>
+    </div>
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <span>GFG PHP Academic Scraper &nbsp;|&nbsp; Educational Project</span>
+    <span>Stack: Python · Flask · BeautifulSoup · ReportLab &nbsp;|&nbsp; Source: geeksforgeeks.org</span>
+  </div>
+</footer>
+
+<div id="toast"></div>
+
+<script>
+  let allArticles = [];
+  let currentView = 'table';
+  let pollInterval = null;
+
+  // ── SCRAPER ──────────────────────────────────────────────────
+  async function startScrape() {
+    const btn = document.getElementById('scrapeBtn');
+    const num = parseInt(document.getElementById('countInput').value) || 15;
+    btn.disabled = true;
+    document.getElementById('progressWrap').classList.add('visible');
+    document.getElementById('progressLabel').textContent = 'INITIALIZING...';
+    document.getElementById('progressFill').style.width = '2%';
+    document.getElementById('statusMsg').textContent = '';
+
+    try {
+      const resp = await fetch('/api/scrape', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ num_articles: num })
+      });
+      const data = await resp.json();
+      if (data.error) { showStatus(data.error,'error'); btn.disabled=false; return; }
+      pollProgress(num);
+    } catch(e) { showStatus('Error: '+e.message,'error'); btn.disabled=false; }
+  }
+
+  function pollProgress(total) {
+    clearInterval(pollInterval);
+    pollInterval = setInterval(async () => {
+      try {
+        const s = await (await fetch('/api/scrape/status')).json();
+        const pct = s.total > 0 ? Math.round((s.progress/s.total)*100) : 5;
+        document.getElementById('progressFill').style.width = pct+'%';
+        document.getElementById('progressLabel').textContent = `SCRAPING... ${s.progress} / ${s.total}`;
+        document.getElementById('statusMsg').textContent = s.message || '';
+        if (s.error) { showStatus(s.error,'error'); clearInterval(pollInterval); document.getElementById('scrapeBtn').disabled=false; }
+        if (!s.running) {
+          clearInterval(pollInterval);
+          document.getElementById('progressFill').style.width = '100%';
+          document.getElementById('progressLabel').textContent = 'DONE ✓';
+          document.getElementById('statusMsg').className = 'status-msg success';
+          document.getElementById('statusMsg').textContent = s.message;
+          document.getElementById('scrapeBtn').disabled = false;
+          showToast('✓ Scrape complete! Loading articles...');
+          setTimeout(loadArticles, 600);
+        }
+      } catch(e) {}
+    }, 1500);
+  }
+
+  // ── LOAD ─────────────────────────────────────────────────────
+  async function loadArticles() {
+    const q    = document.getElementById('searchInput').value;
+    const diff = document.getElementById('diffFilter').value;
+    const sort = document.getElementById('sortFilter').value;
+    showLoading();
+    try {
+      const url  = `/api/articles?q=${encodeURIComponent(q)}&difficulty=${diff}&sort=${sort}`;
+      const data = await (await fetch(url)).json();
+      allArticles = data.articles || [];
+      document.getElementById('statsPill').textContent = `${allArticles.length} article${allArticles.length!==1?'s':''}`;
+      renderArticles(allArticles);
+    } catch(e) { showError('Failed to load: '+e.message); }
+  }
+
+  // ── RENDER ───────────────────────────────────────────────────
+  function renderArticles(articles) {
+    if (!articles.length) {
+      document.getElementById('articleOutput').innerHTML = `
+        <div class="state-box">
+          <span class="state-icon">🔭</span>
+          <div class="state-title">No Results</div>
+          <div class="state-desc">// Try adjusting your search or filters</div>
+        </div>`;
+      return;
+    }
+    currentView === 'table' ? renderTable(articles) : renderCards(articles);
+  }
+
+  function diffBadge(d) {
+    const l = (d||'').toLowerCase();
+    if (l.includes('easy')||l.includes('basic'))   return `<span class="diff-badge diff-easy">${esc(d)}</span>`;
+    if (l.includes('medium'))                       return `<span class="diff-badge diff-medium">${esc(d)}</span>`;
+    if (l.includes('hard')||l.includes('expert'))  return `<span class="diff-badge diff-hard">${esc(d)}</span>`;
+    return `<span class="diff-badge diff-na">${esc(d||'N/A')}</span>`;
+  }
+
+  function renderTable(articles) {
+    const rows = articles.map((a,i) => `
+      <tr style="animation-delay:${i*0.02}s">
+        <td>
+          <div class="title-cell">${esc(a.title)}</div>
+          <a class="title-link" href="${a.url}" target="_blank" rel="noopener">↗ View on GFG</a>
+        </td>
+        <td>${diffBadge(a.difficulty)}</td>
+        <td class="concepts-cell" title="${esc(a.key_concepts)}">${a.key_concepts==='Not Available'?'<span class="na">N/A</span>':esc(a.key_concepts)}</td>
+        <td>${a.code_snippet==='Not Available'?'<span class="na">N/A</span>':`<div class="code-cell">${esc(a.code_snippet.substring(0,80))}…</div>`}</td>
+        <td>${a.complexity==='Not Available'?'<span class="na">N/A</span>':esc(a.complexity)}</td>
+        <td style="font-size:0.78rem;color:var(--muted);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${esc(a.related_links)}">${a.related_links==='Not Available'?'<span class="na">N/A</span>':esc(a.related_links.substring(0,60))+'…'}</td>
+      </tr>`).join('');
+
+    document.getElementById('articleOutput').innerHTML = `
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Topic Title</th>
+            <th>Difficulty</th>
+            <th>Key Concepts</th>
+            <th>Code Snippet</th>
+            <th>Complexity</th>
+            <th>References</th>
+          </tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>`;
+  }
+
+  function renderCards(articles) {
+    const cards = articles.map((a,i) => `
+      <div class="article-card" style="animation-delay:${i*0.04}s">
+        <div class="card-header">
+          <span class="card-num">#${String(i+1).padStart(2,'0')}</span>
+          <div class="card-title">${esc(a.title)}</div>
+          ${diffBadge(a.difficulty)}
+        </div>
+        <div class="card-body">
+          <div class="card-section-label">Key Concepts</div>
+          <div class="card-text">${a.key_concepts==='Not Available'?'<i>Not Available</i>':esc(a.key_concepts)}</div>
+
+          ${a.code_snippet!=='Not Available'?`
+          <div class="card-section-label">Code Snippet</div>
+          <pre class="card-code">${esc(a.code_snippet.substring(0,200))}${a.code_snippet.length>200?'\n...':''}</pre>`:''}
+
+          ${a.complexity!=='Not Available'?`
+          <div class="card-section-label">Complexity</div>
+          <div style="font-size:0.82rem;color:var(--text);">${esc(a.complexity)}</div>`:''}
+        </div>
+        <div class="card-footer">
+          <a class="visit-link" href="${a.url}" target="_blank" rel="noopener">↗ geeksforgeeks.org</a>
+          <span style="font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--muted);">${esc(a.scraped_at||'')}</span>
+        </div>
+      </div>`).join('');
+    document.getElementById('articleOutput').innerHTML = `<div class="cards-grid">${cards}</div>`;
+  }
+
+  // ── PDF ──────────────────────────────────────────────────────
+  async function generatePDF() {
+    if (!allArticles.length) { showToast('⚠ No data — run scraper first!'); return; }
+    const btn  = document.getElementById('pdfBtn');
+    const name = document.getElementById('pdfNameInput').value.trim()
+               || document.getElementById('heroNameInput').value.trim()
+               || 'Student';
+    btn.disabled = true;
+    document.getElementById('pdfStatus').textContent = '⏳ Generating PDF...';
+    try {
+      const resp = await fetch('/api/generate-pdf', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ student_name: name })
+      });
+      const data = await resp.json();
+      if (data.error) { document.getElementById('pdfStatus').textContent = '❌ '+data.error; }
+      else {
+        document.getElementById('pdfStatus').innerHTML =
+          `✅ PDF ready! <a href="${data.url}" style="color:var(--green);font-weight:600;">Click to download</a>`;
+        showToast('✓ PDF generated successfully!');
+      }
+    } catch(e) { document.getElementById('pdfStatus').textContent = '❌ Error: '+e.message; }
+    finally { btn.disabled = false; }
+  }
+
+  // ── VIEWS ────────────────────────────────────────────────────
+  function setView(v) {
+    currentView = v;
+    document.getElementById('viewTable').classList.toggle('active', v==='table');
+    document.getElementById('viewCards').classList.toggle('active', v==='cards');
+    renderArticles(allArticles);
+  }
+
+  // ── HELPERS ──────────────────────────────────────────────────
+  function showLoading() {
+    document.getElementById('articleOutput').innerHTML = `
+      <div class="state-box">
+        <div class="spinner"></div>
+        <div class="state-title">Loading Articles...</div>
+      </div>`;
+  }
+  function showError(msg) {
+    document.getElementById('articleOutput').innerHTML = `
+      <div class="state-box">
+        <span class="state-icon">⚠</span>
+        <div class="state-title" style="color:var(--hard)">${esc(msg)}</div>
+      </div>`;
+  }
+  function showStatus(msg, type) {
+    const el = document.getElementById('statusMsg');
+    el.textContent = msg; el.className = `status-msg ${type}`;
+  }
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3200);
+  }
+  function esc(s) {
+    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  window.addEventListener('DOMContentLoaded', () => { loadArticles(); });
+</script>
+</body>
+</html>
