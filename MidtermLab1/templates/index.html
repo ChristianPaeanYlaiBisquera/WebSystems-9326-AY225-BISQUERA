@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GOG Game Vault — Web Scraper</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0a0c10;
+      --bg2: #0f1218;
+      --card: #13171f;
+      --border: #1e2535;
+      --accent: #6c4fff;
+      --accent2: #00e5ff;
+      --gold: #f5c842;
+      --text: #cdd6f4;
+      --muted: #6e738d;
+      --danger: #f38ba8;
+      --success: #a6e3a1;
+      --glow: 0 0 18px rgba(108,79,255,0.45);
+      --glow2: 0 0 14px rgba(0,229,255,0.3);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Exo 2', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Scanline overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.03) 2px,
+        rgba(0,0,0,0.03) 4px
+      );
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    /* ===== HEADER ===== */
+    header {
+      background: linear-gradient(135deg, #0d1021 0%, #0a0c1a 50%, #0d0f1a 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+    }
+
+    .header-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 70px;
+      gap: 1.5rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Orbitron', monospace;
+      font-weight: 900;
+      font-size: 0.85rem;
+      color: #fff;
+      box-shadow: var(--glow);
+      flex-shrink: 0;
+    }
+
+    .logo-text {
+      font-family: 'Orbitron', monospace;
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: #fff;
+      letter-spacing: 0.06em;
+      line-height: 1.1;
+    }
+
+    .logo-sub {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--accent2);
+      letter-spacing: 0.2em;
+      display: block;
+      margin-top: 1px;
+    }
+
+    .header-badge {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+    }
+
+    /* ===== HERO SCRAPER PANEL ===== */
+    .hero {
+      background: linear-gradient(160deg, #0e1020 0%, #0a0d1a 60%, #0c0e18 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 3rem 2rem 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: 'GOG';
+      position: absolute;
+      right: -2rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-family: 'Orbitron', monospace;
+      font-size: 14rem;
+      font-weight: 900;
+      color: rgba(108,79,255,0.04);
+      pointer-events: none;
+      user-select: none;
+      letter-spacing: -0.05em;
+    }
+
+    .hero-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .hero-title {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.4rem;
+    }
+
+    .hero-title span {
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-desc {
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-family: 'Share Tech Mono', monospace;
+      margin-bottom: 2rem;
+      letter-spacing: 0.05em;
+    }
+
+    .scraper-panel {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .field-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--accent2);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .url-input {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.65rem 1rem;
+      color: var(--text);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.85rem;
+      width: 360px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+
+    .url-input:focus {
+      border-color: var(--accent);
+      box-shadow: var(--glow);
+    }
+
+    .count-input {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.65rem 1rem;
+      color: var(--text);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.85rem;
+      width: 110px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .count-input:focus { border-color: var(--accent); }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.68rem 1.5rem;
+      border-radius: 6px;
+      font-family: 'Orbitron', monospace;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      text-transform: uppercase;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), #8a6fff);
+      color: #fff;
+      box-shadow: var(--glow);
+    }
+
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 0 28px rgba(108,79,255,0.6); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    .btn-outline:hover { border-color: var(--accent2); color: var(--accent2); }
+
+    /* Progress */
+    .progress-bar-wrap {
+      margin-top: 1.25rem;
+      display: none;
+    }
+
+    .progress-bar-wrap.visible { display: block; }
+
+    .progress-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--accent2);
+      margin-bottom: 0.4rem;
+      letter-spacing: 0.08em;
+    }
+
+    .progress-track {
+      height: 6px;
+      background: var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 3px;
+      transition: width 0.4s ease;
+      box-shadow: var(--glow2);
+    }
+
+    .status-msg {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 0.5rem;
+      letter-spacing: 0.06em;
+    }
+
+    .status-msg.error { color: var(--danger); }
+    .status-msg.success { color: var(--success); }
+
+    /* ===== MAIN CONTENT ===== */
+    .main {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    /* Controls Bar */
+    .controls-bar {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 1.75rem;
+      padding: 1rem 1.25rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+
+    .search-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 0.8rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-size: 0.9rem;
+      pointer-events: none;
+    }
+
+    .search-input {
+      width: 100%;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.6rem 1rem 0.6rem 2.4rem;
+      color: var(--text);
+      font-family: 'Exo 2', sans-serif;
+      font-size: 0.88rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-input:focus { border-color: var(--accent); }
+    .search-input::placeholder { color: var(--muted); }
+
+    .filter-select {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.6rem 0.9rem;
+      color: var(--text);
+      font-family: 'Exo 2', sans-serif;
+      font-size: 0.88rem;
+      outline: none;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+
+    .filter-select:focus { border-color: var(--accent); }
+
+    .stats-badge {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+      padding: 0.4rem 0.75rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+    }
+
+    /* View toggle */
+    .view-toggle {
+      display: flex;
+      gap: 0.25rem;
+    }
+
+    .view-btn {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 0.45rem 0.7rem;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.15s;
+    }
+
+    .view-btn.active, .view-btn:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    /* ===== TABLE VIEW ===== */
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--card);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+
+    thead tr {
+      background: linear-gradient(90deg, #13172a, #0f1322);
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      padding: 0.85rem 1rem;
+      text-align: left;
+      font-family: 'Orbitron', monospace;
+      font-size: 0.65rem;
+      color: var(--accent2);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    th:hover { color: #fff; }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
+    }
+
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: rgba(108,79,255,0.06); }
+
+    td {
+      padding: 0.85rem 1rem;
+      vertical-align: middle;
+      color: var(--text);
+    }
+
+    .game-title-cell {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .game-thumb {
+      width: 52px;
+      height: 30px;
+      border-radius: 4px;
+      object-fit: cover;
+      background: var(--border);
+      flex-shrink: 0;
+      border: 1px solid var(--border);
+    }
+
+    .game-title-text {
+      font-weight: 600;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 200px;
+    }
+
+    .game-link {
+      color: var(--accent2);
+      text-decoration: none;
+      font-size: 0.75rem;
+      font-family: 'Share Tech Mono', monospace;
+    }
+
+    .game-link:hover { text-decoration: underline; }
+
+    .platform-tag {
+      display: inline-block;
+      padding: 0.18rem 0.55rem;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-family: 'Share Tech Mono', monospace;
+      letter-spacing: 0.05em;
+      margin: 0.1rem;
+      white-space: nowrap;
+    }
+
+    .pt-windows { background: rgba(0,120,215,0.2); color: #60b0ff; border: 1px solid rgba(0,120,215,0.3); }
+    .pt-macos { background: rgba(255,255,255,0.08); color: #ccc; border: 1px solid rgba(255,255,255,0.15); }
+    .pt-linux { background: rgba(255,153,0,0.15); color: #ffb84d; border: 1px solid rgba(255,153,0,0.25); }
+    .pt-default { background: rgba(108,79,255,0.15); color: #a89fff; border: 1px solid rgba(108,79,255,0.25); }
+
+    .na { color: var(--muted); font-style: italic; font-size: 0.8rem; }
+
+    .features-cell {
+      max-width: 220px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    /* ===== CARD VIEW ===== */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .game-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+      animation: fadeIn 0.35s ease both;
+    }
+
+    .game-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4), var(--glow);
+      border-color: rgba(108,79,255,0.4);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card-cover {
+      width: 100%;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      background: var(--bg2);
+      display: block;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .card-cover-placeholder {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: linear-gradient(135deg, #13171f, #0f1218);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-bottom: 1px solid var(--border);
+      font-family: 'Orbitron', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+    }
+
+    .card-body {
+      padding: 1rem;
+    }
+
+    .card-title {
+      font-weight: 700;
+      color: #fff;
+      font-size: 0.95rem;
+      margin-bottom: 0.6rem;
+      line-height: 1.3;
+    }
+
+    .card-meta {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0.25rem 0.5rem;
+      font-size: 0.78rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .meta-key {
+      font-family: 'Share Tech Mono', monospace;
+      color: var(--accent2);
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+    }
+
+    .meta-val {
+      color: var(--text);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .card-features {
+      font-size: 0.75rem;
+      color: var(--muted);
+      line-height: 1.4;
+      border-top: 1px solid var(--border);
+      padding-top: 0.65rem;
+      margin-top: 0.5rem;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 0.75rem;
+    }
+
+    .card-platforms { display: flex; gap: 0.25rem; flex-wrap: wrap; }
+
+    .visit-link {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--accent);
+      text-decoration: none;
+      letter-spacing: 0.06em;
+      transition: color 0.15s;
+    }
+
+    .visit-link:hover { color: var(--accent2); }
+
+    /* Empty/Loading States */
+    .state-box {
+      text-align: center;
+      padding: 5rem 2rem;
+      color: var(--muted);
+    }
+
+    .state-icon {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      display: block;
+      opacity: 0.4;
+    }
+
+    .state-title {
+      font-family: 'Orbitron', monospace;
+      font-size: 1rem;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.06em;
+    }
+
+    .state-desc {
+      font-size: 0.85rem;
+      font-family: 'Share Tech Mono', monospace;
+      letter-spacing: 0.05em;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-bottom: 1rem;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ===== FOOTER ===== */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem;
+      margin-top: 4rem;
+      text-align: center;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+    }
+
+    .footer-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .footer-note { color: var(--muted); }
+    .footer-accent { color: var(--accent2); }
+
+    /* Export buttons */
+    .export-wrap {
+      display: flex;
+      gap: 0.5rem;
+      margin-left: auto;
+    }
+
+    /* Notification toast */
+    #toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--card);
+      border: 1px solid var(--accent);
+      border-radius: 8px;
+      padding: 0.85rem 1.25rem;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--text);
+      box-shadow: var(--glow);
+      transform: translateY(4rem);
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 999;
+      max-width: 320px;
+    }
+
+    #toast.show { transform: translateY(0); opacity: 1; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .header-inner { height: 58px; }
+      .hero { padding: 2rem 1rem 1.75rem; }
+      .main { padding: 1.25rem; }
+      .url-input { width: 100%; }
+      .scraper-panel { flex-direction: column; align-items: stretch; }
+      .footer-inner { flex-direction: column; text-align: center; }
+      .export-wrap { margin: 0 auto; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-icon">GOG</div>
+      <div>
+        <div class="logo-text">GAME VAULT</div>
+        <span class="logo-sub">WEB SCRAPER v1.0</span>
+      </div>
+    </div>
+    <div class="header-badge">SOURCE: GOG.COM &nbsp;|&nbsp; PYTHON + FLASK + BEAUTIFULSOUP</div>
+  </div>
+</header>
+
+<!-- ===== HERO / SCRAPER PANEL ===== -->
+<section class="hero">
+  <div class="hero-inner">
+    <h1 class="hero-title">GOG <span>Game Data</span> Scraper</h1>
+    <p class="hero-desc">// Scrapes game titles, release dates, platforms, developers, publishers &amp; features from gog.com</p>
+
+    <div class="scraper-panel">
+      <div class="field-group">
+        <label class="field-label">Base URL</label>
+        <input class="url-input" id="urlInput" type="text" value="https://catalog.gog.com/v1/catalog" readonly />
+      </div>
+      <div class="field-group">
+        <label class="field-label">Games (10–50)</label>
+        <input class="count-input" id="countInput" type="number" value="20" min="10" max="50" />
+      </div>
+      <button class="btn btn-primary" id="scrapeBtn" onclick="startScrape()">
+        ▶ &nbsp;RUN SCRAPER
+      </button>
+      <button class="btn btn-outline" onclick="loadGames()">⟳ REFRESH</button>
+    </div>
+
+    <div class="progress-bar-wrap" id="progressWrap">
+      <div class="progress-label" id="progressLabel">SCRAPING... 0 / 0</div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill" style="width:0%"></div>
+      </div>
+      <div class="status-msg" id="statusMsg"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== MAIN ===== -->
+<main class="main">
+
+  <!-- Controls Bar -->
+  <div class="controls-bar">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input class="search-input" id="searchInput" type="text" placeholder="Search by title, developer, publisher, features..."
+        oninput="applyFilters()" />
+    </div>
+
+    <select class="filter-select" id="platformFilter" onchange="applyFilters()">
+      <option value="all">All Platforms</option>
+    </select>
+
+    <select class="filter-select" id="sortFilter" onchange="applyFilters()">
+      <option value="title">Sort: Title A–Z</option>
+      <option value="release">Sort: Release Date</option>
+      <option value="developer">Sort: Developer</option>
+    </select>
+
+    <div class="export-wrap">
+      <button class="btn btn-outline" onclick="downloadCSV()" title="Download CSV">⬇ CSV</button>
+      <button class="btn btn-outline" onclick="downloadJSON()" title="Download JSON">⬇ JSON</button>
+    </div>
+
+    <div class="view-toggle">
+      <button class="view-btn active" id="viewTable" onclick="setView('table')" title="Table View">▤</button>
+      <button class="view-btn" id="viewCards" onclick="setView('cards')" title="Card View">⊞</button>
+    </div>
+
+    <div class="stats-badge" id="statsBadge">0 games</div>
+  </div>
+
+  <!-- Game Output -->
+  <div id="gameOutput">
+    <div class="state-box">
+      <span class="state-icon">🎮</span>
+      <div class="state-title">NO DATA YET</div>
+      <div class="state-desc">// Click RUN SCRAPER to fetch games from GOG.com</div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-note">
+      GOG GAME VAULT &nbsp;|&nbsp; Educational Web Scraping Project &nbsp;|&nbsp;
+      Data source: <span class="footer-accent">gog.com</span>
+    </div>
+    <div class="footer-note">
+      Stack: <span class="footer-accent">Python · Flask · BeautifulSoup · Requests</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<script>
+  let allGames = [];
+  let currentView = 'table';
+  let pollInterval = null;
+
+  // ===== SCRAPER =====
+  async function startScrape() {
+    const btn = document.getElementById('scrapeBtn');
+    const num = parseInt(document.getElementById('countInput').value) || 20;
+
+    btn.disabled = true;
+    document.getElementById('progressWrap').classList.add('visible');
+    document.getElementById('progressLabel').textContent = `INITIALIZING...`;
+    document.getElementById('statusMsg').textContent = '';
+    document.getElementById('statusMsg').className = 'status-msg';
+    document.getElementById('progressFill').style.width = '2%';
+
+    try {
+      const resp = await fetch('/api/scrape', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ num_games: num })
+      });
+      const data = await resp.json();
+      if (data.error) {
+        showStatus(data.error, 'error');
+        btn.disabled = false;
+        return;
+      }
+      pollProgress(num);
+    } catch (e) {
+      showStatus('Connection error: ' + e.message, 'error');
+      btn.disabled = false;
+    }
+  }
+
+  function pollProgress(total) {
+    clearInterval(pollInterval);
+    pollInterval = setInterval(async () => {
+      try {
+        const resp = await fetch('/api/scrape/status');
+        const s = await resp.json();
+        const pct = s.total > 0 ? Math.round((s.progress / s.total) * 100) : 5;
+        document.getElementById('progressFill').style.width = pct + '%';
+        document.getElementById('progressLabel').textContent =
+          `SCRAPING... ${s.progress} / ${s.total}`;
+        document.getElementById('statusMsg').textContent = s.message || '';
+
+        if (s.error) {
+          showStatus(s.error, 'error');
+          clearInterval(pollInterval);
+          document.getElementById('scrapeBtn').disabled = false;
+        }
+
+        if (!s.running) {
+          clearInterval(pollInterval);
+          document.getElementById('progressFill').style.width = '100%';
+          document.getElementById('progressLabel').textContent = `DONE ✓`;
+          document.getElementById('statusMsg').textContent = s.message;
+          document.getElementById('statusMsg').className = 'status-msg success';
+          document.getElementById('scrapeBtn').disabled = false;
+          showToast('✓ Scrape complete! Loading games...');
+          setTimeout(loadGames, 600);
+        }
+      } catch (e) { /* ignore */ }
+    }, 1200);
+  }
+
+  // ===== LOAD GAMES =====
+  async function loadGames() {
+    const q = document.getElementById('searchInput').value;
+    const platform = document.getElementById('platformFilter').value;
+    const sort = document.getElementById('sortFilter').value;
+
+    showLoading();
+
+    try {
+      const url = `/api/games?q=${encodeURIComponent(q)}&platform=${platform}&sort=${sort}`;
+      const resp = await fetch(url);
+      const data = await resp.json();
+      allGames = data.games || [];
+      document.getElementById('statsBadge').textContent = `${allGames.length} game${allGames.length !== 1 ? 's' : ''}`;
+      renderGames(allGames);
+      loadPlatforms();
+    } catch (e) {
+      showError('Failed to load games: ' + e.message);
+    }
+  }
+
+  async function loadPlatforms() {
+    try {
+      const resp = await fetch('/api/platforms');
+      const platforms = await resp.json();
+      const sel = document.getElementById('platformFilter');
+      const current = sel.value;
+      // Keep "All Platforms" option + rebuild
+      sel.innerHTML = '<option value="all">All Platforms</option>';
+      platforms.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p.toLowerCase();
+        opt.textContent = p;
+        if (p.toLowerCase() === current) opt.selected = true;
+        sel.appendChild(opt);
+      });
+    } catch (e) { /* ignore */ }
+  }
+
+  function applyFilters() { loadGames(); }
+
+  // ===== RENDER =====
+  function renderGames(games) {
+    const out = document.getElementById('gameOutput');
+    if (!games.length) {
+      out.innerHTML = `<div class="state-box">
+        <span class="state-icon">🔭</span>
+        <div class="state-title">NO RESULTS</div>
+        <div class="state-desc">// Try adjusting your search or filters</div>
+      </div>`;
+      return;
+    }
+    if (currentView === 'table') renderTable(games);
+    else renderCards(games);
+  }
+
+  function renderTable(games) {
+    const rows = games.map((g, i) => `
+      <tr style="animation-delay:${i * 0.025}s">
+        <td>
+          <div class="game-title-cell">
+            ${g.cover && g.cover !== 'Not Available'
+              ? `<img class="game-thumb" src="${g.cover}" alt="" loading="lazy" onerror="this.style.display='none'">`
+              : ''}
+            <div>
+              <div class="game-title-text" title="${escHtml(g.title)}">${escHtml(g.title)}</div>
+              <a class="game-link" href="${g.url}" target="_blank" rel="noopener">↗ VIEW ON GOG</a>
+            </div>
+          </div>
+        </td>
+        <td>${g.release_date === 'Not Available' ? '<span class="na">N/A</span>' : escHtml(g.release_date)}</td>
+        <td>${renderPlatformTags(g.platforms)}</td>
+        <td>${g.developer === 'Not Available' ? '<span class="na">N/A</span>' : escHtml(g.developer)}</td>
+        <td>${g.publisher === 'Not Available' ? '<span class="na">N/A</span>' : escHtml(g.publisher)}</td>
+        <td class="features-cell" title="${escHtml(g.features)}">${g.features === 'Not Available' ? '<span class="na">N/A</span>' : escHtml(g.features)}</td>
+      </tr>
+    `).join('');
+
+    document.getElementById('gameOutput').innerHTML = `
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>GAME TITLE</th>
+              <th>RELEASE DATE</th>
+              <th>PLATFORMS</th>
+              <th>DEVELOPER</th>
+              <th>PUBLISHER</th>
+              <th>KEY FEATURES</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+    `;
+  }
+
+  function renderCards(games) {
+    const cards = games.map((g, i) => `
+      <div class="game-card" style="animation-delay:${i * 0.05}s">
+        ${g.cover && g.cover !== 'Not Available'
+          ? `<img class="card-cover" src="${g.cover}" alt="${escHtml(g.title)}" loading="lazy" onerror="this.outerHTML='<div class=card-cover-placeholder>NO IMAGE</div>'">`
+          : `<div class="card-cover-placeholder">NO IMAGE</div>`}
+        <div class="card-body">
+          <div class="card-title">${escHtml(g.title)}</div>
+          <div class="card-meta">
+            <span class="meta-key">RELEASED</span>
+            <span class="meta-val">${escHtml(g.release_date)}</span>
+            <span class="meta-key">DEV</span>
+            <span class="meta-val" title="${escHtml(g.developer)}">${escHtml(g.developer)}</span>
+            <span class="meta-key">PUB</span>
+            <span class="meta-val" title="${escHtml(g.publisher)}">${escHtml(g.publisher)}</span>
+          </div>
+          ${g.features !== 'Not Available'
+            ? `<div class="card-features">${escHtml(g.features.substring(0,120))}${g.features.length > 120 ? '…' : ''}</div>`
+            : ''}
+          <div class="card-footer">
+            <div class="card-platforms">${renderPlatformTags(g.platforms)}</div>
+            ${g.url !== 'Not Available'
+              ? `<a class="visit-link" href="${g.url}" target="_blank" rel="noopener">↗ GOG.COM</a>`
+              : ''}
+          </div>
+        </div>
+      </div>
+    `).join('');
+    document.getElementById('gameOutput').innerHTML = `<div class="cards-grid">${cards}</div>`;
+  }
+
+  function renderPlatformTags(platforms) {
+    if (!platforms || platforms === 'Not Available') return '<span class="na">N/A</span>';
+    return platforms.split(', ').map(p => {
+      const cls = p.toLowerCase().includes('windows') ? 'pt-windows'
+        : p.toLowerCase().includes('mac') ? 'pt-macos'
+        : p.toLowerCase().includes('linux') ? 'pt-linux'
+        : 'pt-default';
+      return `<span class="platform-tag ${cls}">${escHtml(p)}</span>`;
+    }).join('');
+  }
+
+  // ===== VIEWS =====
+  function setView(v) {
+    currentView = v;
+    document.getElementById('viewTable').classList.toggle('active', v === 'table');
+    document.getElementById('viewCards').classList.toggle('active', v === 'cards');
+    renderGames(allGames);
+  }
+
+  // ===== EXPORT =====
+  function downloadJSON() {
+    if (!allGames.length) { showToast('No data to export!'); return; }
+    const blob = new Blob([JSON.stringify(allGames, null, 2)], { type: 'application/json' });
+    triggerDownload(blob, 'gog_games.json');
+  }
+
+  function downloadCSV() {
+    if (!allGames.length) { showToast('No data to export!'); return; }
+    const fields = ['title','release_date','platforms','developer','publisher','features','url'];
+    const header = fields.join(',');
+    const rows = allGames.map(g =>
+      fields.map(f => `"${(g[f] || '').replace(/"/g,'""')}"`).join(',')
+    );
+    const blob = new Blob([[header, ...rows].join('\n')], { type: 'text/csv' });
+    triggerDownload(blob, 'gog_games.csv');
+  }
+
+  function triggerDownload(blob, name) {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = name;
+    a.click();
+    showToast(`✓ Downloaded ${name}`);
+  }
+
+  // ===== UI HELPERS =====
+  function showLoading() {
+    document.getElementById('gameOutput').innerHTML = `
+      <div class="state-box">
+        <div class="spinner"></div>
+        <div class="state-title">LOADING DATA</div>
+        <div class="state-desc">// Fetching from local storage...</div>
+      </div>`;
+  }
+
+  function showError(msg) {
+    document.getElementById('gameOutput').innerHTML = `
+      <div class="state-box">
+        <span class="state-icon">⚠</span>
+        <div class="state-title" style="color:var(--danger)">${escHtml(msg)}</div>
+      </div>`;
+  }
+
+  function showStatus(msg, type) {
+    const el = document.getElementById('statusMsg');
+    el.textContent = msg;
+    el.className = `status-msg ${type}`;
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3200);
+  }
+
+  function escHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  // On load
+  window.addEventListener('DOMContentLoaded', () => {
+    loadGames();
+    loadPlatforms();
+  });
+</script>
+</body>
+</html>
